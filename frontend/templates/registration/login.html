@@ -1,0 +1,59 @@
+{% load static widget_tweaks %}
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sign-in</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+</head>
+
+<body class="sign-in text-center my-5 py-5">
+
+<form class="form-signin" method="post">
+    <svg xmlns="http://www.w3.org/2000/svg" width="76" height="76" fill="currentColor" class="bi bi-person-circle"
+         viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+        <path fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+    </svg>
+    <h4 class="h4 mb-3 font-weight-bold">Пожалуйста войдите</h4>
+    {% csrf_token %}
+    {% for f in form %}
+        {% if f.name == 'username' %}
+            {{ f|add_class:"form-control mb-2"|attr:'placeholder:Электронный адресс' }}
+        {% elif f.name == 'password' %}
+            {{ f|add_class:"form-control mb-2"|attr:'placeholder:Пароль' }}
+        {% endif %}
+    {% endfor %}
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me">Запомнить меня
+        </label>
+    </div>
+    <button class="btn btn-dark btn-block mt-2" type="submit">Войти</button>
+</form>
+

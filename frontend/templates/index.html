@@ -1,0 +1,58 @@
+{% extends 'layout/base.html' %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+
+    <!-- breadcrumb-start -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb  py-2">
+            <div class="container d-flex">
+                <li class="breadcrumb-item "><a href="{% url 'home' %}">Главная</a></li>
+            </div>
+        </ol>
+    </nav>
+    <!-- breadcrumb-end -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Список заказов в процессе</h4>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Команда</th>
+                    <th scope="col">Клиент</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Дата старта</th>
+                    <th scope="col">Дата окончания</th>
+                </tr>
+                </thead>
+                <tbody class="bg-light">
+                {% for wash_order in wash_orders %}
+                    <tr>
+                        <th scope="row">{{ wash_order.numbering }}</th>
+                        <td>{{ wash_order.team.worker_name|default:'-' }}</td>
+                        <td><a class="text-info text-decoration-none"
+                               href="{% url 'client-detail' wash_order.client.pk %}">{{ wash_order.client.full_name }}</a>
+                        </td>
+                        <td class="text-success">{{ wash_order.get_status_display }}</td>
+                        <td>{{ wash_order.start_time|default:'-' }}</td>
+                        <td>{{ wash_order.end_time|default:'-' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script></script>
+{% endblock extra_js %}

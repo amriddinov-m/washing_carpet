@@ -1,0 +1,218 @@
+{% extends 'layout/base.html' %}
+{% load poll_extras  humanize %}
+
+{% block content %}
+    <div class="container">
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+                <div class="col-md-4">
+                    <h2 class="mt-1 ml-1">Отчеты</h2>
+                </div>
+                <div class="col-xl-12 col-xxl-12">
+                    <div class="row">
+                        <div class="col-xl-12 col-xxl-12 col-lg-12 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="container mt-0 mb-0">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <input value="{{ startdate }}" class="form-control"
+                                                                   type="date"
+                                                                   name="startdate" required>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input value="{{ enddate }}" class="form-control"
+                                                                   type="date"
+                                                                   name="enddate" required>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button type="submit" class="btn btn-dark float-right">Поиск
+                                                            </button>
+                                                            <a href="{% url 'report-income' %}"
+                                                               class="btn btn-danger float-right mr-2">Убрать</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <div class="container mt-0 mb-0">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-sm table-hover table-striped">
+
+                                                        <tbody>
+                                                        <tr>
+                                                            <table id="w0"
+                                                                   class="table table-striped table-bordered detail-view">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <th>Общее кол.во заказов</th>
+                                                                    <td>{{ wash_order_totals.count }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Общее кол.во элементов заказов</th>
+                                                                    <td>{{ wash_order_totals.items_count|default:'-' }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Общий квадрат мойки</th>
+                                                                    <td>{{ wash_order_totals.total_area|default:0 }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Общая сумма</th>
+                                                                    <td>{{ wash_order_totals.total_summa|default:0|intcomma }}</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-responsive-sm mb-0">
+                                            <thead class="thead-dark w-100">
+                                            <tr>
+                                                <th>Команда</th>
+                                                <th>Кол.во заказов</th>
+                                                <th>Кол.во ковров</th>
+                                                <th>Общий квадрат</th>
+                                                <th>Сумма</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for team in report_teams %}
+                                                <tr>
+                                                    <td>{{ team.worker_name }}</td>
+                                                    <td>{{ team.count_wash_order|default:0 }}</td>
+                                                    <td>{{ team.count_wash_order_item|default:0 }}</td>
+                                                    <td>{{ team.area_wash_order_item|default:0 }}</td>
+                                                    <td>{{ team.summa_wash_order_item|default:0|intcomma }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr class="table-dark">
+                                                <td colspan="4">
+                                                    <h4 class="text-dark">Общий итог</h4>
+                                                </td>
+
+                                                <td>
+                                                    <input class="form-control-sm mt-1 border border-secondary bg-dark text-white border-dark"
+                                                           readonly
+                                                           value="{{ wash_order_totals.total_summa|intcomma|remove_zero }} сум"
+                                                           type="text" name="name_sum_list">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <div class="container mt-0 mb-0">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-sm table-hover table-striped">
+
+                                                        <tbody>
+                                                        <tr>
+                                                            <table id="w0"
+                                                                   class="table table-striped table-bordered detail-view">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <th>Общий расход с наличными</th>
+                                                                    <td>{{ sum_amount.payment_cash_total_amount|default:0|intcomma|remove_zero }}
+                                                                        Сум
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Общий расход без наличными</th>
+                                                                    <td>{{ sum_amount.payment_card_total_amount|default:0|intcomma|remove_zero }}
+                                                                        Сум
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="card">
+                                                    <div class="card-header" id="headingOne">
+                                                        <h2 class="mb-0">
+                                                            <h4 class="text-dark mt-1 ml-1" style="cursor: pointer"
+                                                                data-toggle="collapse"
+                                                                data-target="#collapseOne" aria-expanded="true"
+                                                                aria-controls="collapseOne">Оплаты</h4>
+                                                        </h2>
+                                                    </div>
+
+                                                    <div id="collapseOne" class="collapse"
+                                                         aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-responsive-sm mb-0">
+                                                                    <thead class="thead-dark w-100">
+                                                                    <tr>
+                                                                        <th>Юзер</th>
+                                                                        <th>Описание</th>
+                                                                        <th>Создано</th>
+                                                                        <th>Метод оплаты</th>
+                                                                        <th>Сумма</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    {% for payment in report_payments %}
+                                                                        <tr>
+                                                                            <td>{{ payment.user }}</td>
+                                                                            <td>{{ payment.comment }}</td>
+                                                                            <td>{{ payment.created }}</td>
+                                                                            <td>{{ payment.get_payment_method_display }}</td>
+                                                                            <td>
+                                                                                {% if payment.payment_log_type == 'income' %}
+                                                                                    <span class="badge badge-success badge-lg  text-white">{{ payment.amount|intcomma }} Сум</span>
+                                                                                {% else %}
+                                                                                    <span class="badge badge-danger badge-lg  text-white">{{ payment.amount|intcomma }} Сум</span>
+                                                                                {% endif %}
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends 'layout/base.html' %}
+{% load static widget_tweaks %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+     <nav aria-label=" breadcrumb">
+        <ol class="breadcrumb  py-2">
+            <div class="container d-flex">
+                <li class="breadcrumb-item "><a href="{% url 'home' %}">Главная</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url 'wash-order-list' %}">Заказы</a></li>
+                <li class="breadcrumb-item active text-dark" aria-current="page">{{ washorder.team.worker_name }}</li>
+            </div>
+        </ol>
+    </nav>
+    <div class="content-body">
+        <!-- row -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="ml-3 card-title text-dark" style="text-transform: none">Изменить Заказ</h2></div>
+                        <div class="card-body">
+                            <form action="" method="post">
+                                <div class="row">
+                                    {% csrf_token %}
+                                    {% for f in form %}
+                                        <div class="col-md-4">
+                                            {% if f.name == 'end_time' %}
+                                                {{ f.label_tag }}
+                                                {{ f|add_class:'form-control'|attr:'type:date' }}
+                                            {% else %}
+                                                {{ f.label_tag }}
+                                                {{ f|add_class:'form-control' }}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                    <div class="col-md-8">
+                                        <button type="submit" class="btn btn-dark mt-4 float-right">Изменить</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+{% block extra_js %}
+    <script>
+        function removeClientModalShow(id, name) {
+            $(`#removeClientName`).text(name)
+            $(`#removeClientModal`).modal('toggle')
+            $(`#clientId`).attr('value', id)
+        }
+    </script>
+{% endblock extra_js %}
