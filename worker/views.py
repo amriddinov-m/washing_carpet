@@ -55,7 +55,7 @@ class ReportWorkerPaymentView(ListView):
                     .select_related('user').order_by('-created')
                 context['sum_amount'] = payments.aggregate(total_summa=Sum('amount'))
             else:
-                context['sum_amount'] = PaymentLog.objects.order_by('-created')\
+                context['sum_amount'] = PaymentLog.objects.order_by('-created') \
                     .select_related('user').aggregate(total_summa=Sum('amount'))
         return context
 
@@ -69,7 +69,7 @@ class ReportWorkerPaymentView(ListView):
             if worker and worker != 'all':
                 return PaymentLog.objects.filter(created__range=[startdate + " 00:00", enddate + " 23:59"],
                                                  outcat=2,
-                                                 outlay_child__in   =outlay_ids) \
+                                                 outlay_child__in=outlay_ids) \
                     .annotate(worker_payment=Subquery(Worker.objects.filter(id=OuterRef('outlay_child'))
                                                       .select_related('user')
                                                       .values('full_name')[:1])).order_by('-created')
