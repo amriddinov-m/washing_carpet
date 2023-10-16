@@ -101,8 +101,9 @@ def send_sms(to, text):
             ]
         }
         headers = {'Content-Type': 'application/json'}
+
         r = requests.post(url, json=data,
-                          headers=headers, auth=HTTPBasicAuth('aladdincarpet', 'iG!vO68zT'))
+                          headers=headers, auth=HTTPBasicAuth('login', 'password'))
         return r
     except Exception as ex:
         print(ex)
